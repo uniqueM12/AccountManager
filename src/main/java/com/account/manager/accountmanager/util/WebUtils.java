@@ -10,6 +10,7 @@ import javax.json.JsonObjectBuilder;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,6 +45,8 @@ public class WebUtils {
 				transactionLogStream = transactionLogStream.filter(e -> e.getAccountNumber().equalsIgnoreCase(accountNumber));
 			}
 		}
+		//the design provides that there is no need for this sorting, but you stated that you want it, so Ok.
+		transactionLogStream = transactionLogStream.sorted(Comparator.comparingLong(TransactionLog::getCreatedAt).reversed());
 
 	List<TransactionLog> selectedTransactionLogs = transactionLogStream.collect(Collectors.toList());
 
@@ -58,6 +61,16 @@ public class WebUtils {
 		}
 
 		return arrayBuilder.build().toString().replace("\\", "");
+	}
+
+	public static String convertTransactionLogToJson(TransactionLog transactionLog){
+
+		JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
+				.add("accountNumber", transactionLog.getAccountNumber())
+				.add("amount", transactionLog.getAmount())
+				.add("balance", transactionLog.getBalance())
+				.add("transactionType", transactionLog.getTransactionType().toString());
+		return objectBuilder.build().toString();
 	}
 
 	private static void getObjectArray(JsonArrayBuilder arrayBuilder, JsonObjectBuilder objectBuilder) {

@@ -1,5 +1,6 @@
 package com.account.manager.accountmanager.servlets;
 
+import com.account.manager.accountmanager.dto.TransactionLog;
 import com.account.manager.accountmanager.enums.TransactionTypes;
 import com.account.manager.accountmanager.util.FinanceUtil;
 
@@ -11,9 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.account.manager.accountmanager.util.WebUtils.convertAccountsToJson;
+import static com.account.manager.accountmanager.util.WebUtils.convertTransactionLogToJson;
 
 @WebServlet(name = "DepositServlet", value = "/deposit")
 public class DepositServlet extends HttpServlet {
@@ -28,19 +30,20 @@ public class DepositServlet extends HttpServlet {
 		String accountNumber = request.getParameter("accountnumber");
 		String amount = request.getParameter("amount");
 
+		AtomicReference<TransactionLog> transactionLog = new AtomicReference<>();
 		FinanceUtil.accounts = FinanceUtil.accounts.stream()
 				.peek(account -> {
 					if (account.getAccountNumber().equalsIgnoreCase(accountNumber)) {
 						BigDecimal currentBalance = account.getBalance().add(new BigDecimal(amount));
 						account.setBalance(currentBalance);
-						FinanceUtil.addTransactionLog(accountNumber, new BigDecimal(amount).setScale(2, RoundingMode.HALF_EVEN), account.getBalance(), TransactionTypes.DEPOSIT);
+						transactionLog.set(FinanceUtil.addTransactionLog(accountNumber, new BigDecimal(amount).setScale(2, RoundingMode.HALF_EVEN), account.getBalance(), TransactionTypes.DEPOSIT));
 					}
 				})
 				.collect(Collectors.toList());
 
 		FinanceUtil.accounts.forEach(System.out::println);
 
-		String accountsJson = convertAccountsToJson(FinanceUtil.accounts);
+		String accountsJson = convertTransactionLogToJson(transactionLog.get());
 
 		PrintWriter out = response.getWriter();
 

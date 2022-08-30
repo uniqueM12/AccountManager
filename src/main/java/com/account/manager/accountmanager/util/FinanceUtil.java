@@ -16,12 +16,12 @@ public class FinanceUtil {
 	public static List<Account> accounts;
 
 	public static List<TransactionLog> transactionLogs = new ArrayList<>();
-	public static List<TransactionLog> addTransactionLog(String accountNumber, BigDecimal amount, BigDecimal balance, TransactionTypes transactionType){
+	public static TransactionLog addTransactionLog(String accountNumber, BigDecimal amount, BigDecimal balance, TransactionTypes transactionType){
 
 		TransactionLog transactionLog = new TransactionLog(accountNumber, amount, balance, transactionType);
 
 		transactionLogs.add(transactionLog);
 
-		return transactionLogs;
+		return transactionLog;
 	}
 }

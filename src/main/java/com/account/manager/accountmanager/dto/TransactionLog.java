@@ -3,6 +3,7 @@ package com.account.manager.accountmanager.dto;
 import com.account.manager.accountmanager.enums.TransactionTypes;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 /**
  * Created by Chukwudere Adindu.
@@ -17,11 +18,14 @@ public class TransactionLog {
 
 	private TransactionTypes transactionType;
 
+	private Long createdAt;
+
 	public TransactionLog(String accountNumber, BigDecimal amount,  BigDecimal balance, TransactionTypes transactionType) {
 		this.accountNumber = accountNumber;
 		this.amount = amount;
 		this.balance = balance;
 		this.transactionType = transactionType;
+		this.createdAt = Instant.now().getEpochSecond();
 	}
 
 	public String getAccountNumber() {
@@ -56,6 +60,14 @@ public class TransactionLog {
 		this.transactionType = transactionType;
 	}
 
+	public Long getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Long createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	@Override
 	public String toString() {
 		return "TransactionLog{" +
@@ -63,6 +75,7 @@ public class TransactionLog {
 				", amount=" + amount +
 				", balance=" + balance +
 				", transactionType=" + transactionType +
+				", createdAt=" + createdAt +
 				'}';
 	}
 }
