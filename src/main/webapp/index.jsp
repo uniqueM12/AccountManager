@@ -9,6 +9,6 @@
 </h1>
 <br/>
 <a href="create-accounts?name=Adili&phone=08104142404&counts=4">account Servlet</a>
-<a href="move-cash">Cash Servlet</a>
+<a href="deposit?accountnumber=99&amount=50.00">Deposit Servlet</a>
 </body>
 </html>

@@ -14,10 +14,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import static com.account.manager.accountmanager.util.WebUtils.convertAccountsToJson;
 
 @WebServlet(name = "AccountServlet", value = "/create-accounts")
 public class AccountServlet extends HttpServlet {
@@ -60,33 +63,11 @@ public class AccountServlet extends HttpServlet {
 					.boxed()
 					.map(e -> "" + e)
 					.collect(Collectors.joining());
-			Account account = new Account(name, phone);
+			Account account = new Account(name, phone, BigDecimal.ZERO);
 			account.setAccountNumber(accountNumber);
 			accounts.add(account);
 		}
 
 		return accounts;
-	}
-
-	private String convertAccountsToJson(List<Account> accounts) {
-
-		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-		for (Account account : accounts) {
-			JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
-					.add("firstName", account.getAccountName())
-					.add("phone", account.getPhone())
-					.add("accountNumber", account.getAccountNumber());
-			JsonObject jsonObject = objectBuilder.build();
-			String jsonString;
-			try (Writer writer = new StringWriter()) {
-				Json.createWriter(writer).writeObject(jsonObject);
-				jsonString = writer.toString();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			arrayBuilder.add(jsonString);
-		}
-
-		return arrayBuilder.build().toString().replace("\\", "");
 	}
 }
