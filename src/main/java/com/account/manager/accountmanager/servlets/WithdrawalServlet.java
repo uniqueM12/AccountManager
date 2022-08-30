@@ -1,5 +1,6 @@
 package com.account.manager.accountmanager.servlets;
 
+import com.account.manager.accountmanager.enums.TransactionTypes;
 import com.account.manager.accountmanager.util.FinanceUtil;
 
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
 import static com.account.manager.accountmanager.util.WebUtils.convertAccountsToJson;
@@ -32,6 +34,7 @@ public class WithdrawalServlet extends HttpServlet {
 						if (account.getBalance().compareTo(new BigDecimal(amount)) > -1) {
 							BigDecimal currentBalance = account.getBalance().subtract(new BigDecimal(amount));
 							account.setBalance(currentBalance);
+							FinanceUtil.addTransactionLog(accountNumber, new BigDecimal(amount).setScale(2, RoundingMode.HALF_EVEN), account.getBalance(), TransactionTypes.WITHDRAWAL);
 						} else if (account.getBalance().compareTo(new BigDecimal(amount)) < 1) {
 							System.out.println("insufficient funds");
 						}

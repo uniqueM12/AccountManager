@@ -1,20 +1,14 @@
 package com.account.manager.accountmanager.servlets;
 
-import com.account.manager.accountmanager.model.Account;
+import com.account.manager.accountmanager.dto.Account;
 import com.account.manager.accountmanager.util.FinanceUtil;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

@@ -10,5 +10,6 @@
 <br/>
 <a href="create-accounts?name=Adili&phone=08104142404&counts=4">account Servlet</a>
 <a href="deposit?accountnumber=99&amount=50.00">Deposit Servlet</a>
+<a href="transactions?accountnumber=99">Transaction Logs</a>
 </body>
 </html>

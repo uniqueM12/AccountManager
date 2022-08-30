@@ -1,4 +1,4 @@
-package com.account.manager.accountmanager.model;
+package com.account.manager.accountmanager.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
