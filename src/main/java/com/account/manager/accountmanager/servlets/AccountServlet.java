@@ -41,7 +41,7 @@ public class AccountServlet extends HttpServlet {
 
 		String accountsJson = convertAccountsToJson(accounts);
 
-		System.out.println(accountsJson);
+//		System.out.println(accountsJson);
 
 		PrintWriter out = response.getWriter();
 
@@ -79,7 +79,7 @@ public class AccountServlet extends HttpServlet {
 			JsonObject jsonObject = objectBuilder.build();
 			String jsonString;
 			try (Writer writer = new StringWriter()) {
-				Json.createWriter(writer).write(jsonObject);
+				Json.createWriter(writer).writeObject(jsonObject);
 				jsonString = writer.toString();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -87,6 +87,6 @@ public class AccountServlet extends HttpServlet {
 			arrayBuilder.add(jsonString);
 		}
 
-		return arrayBuilder.build().toString();
+		return arrayBuilder.build().toString().replace("\\", "");
 	}
 }
