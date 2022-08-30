@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 import static com.account.manager.accountmanager.util.WebUtils.convertAccountsToJson;
 
-@WebServlet(name = "DepositServlet", value = "/deposit")
-public class DepositServlet extends HttpServlet {
+@WebServlet(name = "WithdrawalServlet", value = "/withdraw")
+public class WithdrawalServlet extends HttpServlet {
 
 	public void init() {
 	}
@@ -29,8 +29,12 @@ public class DepositServlet extends HttpServlet {
 		FinanceUtil.accounts = FinanceUtil.accounts.stream()
 				.peek(account -> {
 					if (account.getAccountNumber().equalsIgnoreCase(accountNumber)) {
-						BigDecimal currentBalance = account.getBalance().add(new BigDecimal(amount));
-						account.setBalance(currentBalance);
+						if (account.getBalance().compareTo(new BigDecimal(amount)) > -1) {
+							BigDecimal currentBalance = account.getBalance().subtract(new BigDecimal(amount));
+							account.setBalance(currentBalance);
+						} else if (account.getBalance().compareTo(new BigDecimal(amount)) < 1) {
+							System.out.println("insufficient funds");
+						}
 					}
 				})
 				.collect(Collectors.toList());

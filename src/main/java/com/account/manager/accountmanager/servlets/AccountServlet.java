@@ -1,6 +1,7 @@
 package com.account.manager.accountmanager.servlets;
 
 import com.account.manager.accountmanager.model.Account;
+import com.account.manager.accountmanager.util.FinanceUtil;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -24,10 +25,8 @@ import static com.account.manager.accountmanager.util.WebUtils.convertAccountsTo
 
 @WebServlet(name = "AccountServlet", value = "/create-accounts")
 public class AccountServlet extends HttpServlet {
-	public static List<Account> accounts;
 
 	public void init() {
-		accounts = new ArrayList<>();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,13 +37,11 @@ public class AccountServlet extends HttpServlet {
 		String phone = request.getParameter("phone");
 		System.out.println(name + phone);
 
-		accounts = generateAccounts(name, phone);
+		FinanceUtil.accounts = generateAccounts(name, phone);
 
-		accounts.forEach(System.out::println);
+		FinanceUtil.accounts.forEach(System.out::println);
 
-		String accountsJson = convertAccountsToJson(accounts);
-
-//		System.out.println(accountsJson);
+		String accountsJson = convertAccountsToJson(FinanceUtil.accounts);
 
 		PrintWriter out = response.getWriter();
 
