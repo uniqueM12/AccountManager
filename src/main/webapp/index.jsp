@@ -3,22 +3,14 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
-    <link href="css/custom.css">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="create-accounts?name=Adili&phone=08104142404&counts=4">account Servlet</a>
-<a href="deposit?accountnumber=99&amount=50.00">Deposit Servlet</a>
-<a href="transactions?accountnumber=99">Transaction Logs</a>
-
-<h2>Account Management Platform</h2>
-<p>Demo</p>
+<h2>Bank management portal</h2>
 
 <!-- <button class="button" onclick="submit('createAccountForm')">Create Account</button> -->
 
-<p>Created Account</p>
+<h2>Created Account</h2>
 <div class="row">
     <div class="col-75">
         <div class="container">
@@ -26,14 +18,13 @@
                 <div class="row">
                     <div class="col-50">
                         <label for="accountName">Account Name</label>
-                        <input type="text" id="accountName" name="accountName" placeholder="Account owner's name">
+                        <input type="text" id="accountName" name="accountName" placeholder="Account owner's name"/>
                         <label for="phone">Phone Number</label>
-                        <input type="number" id="phone" name="phoneNumber" placeholder="Enter phone number (start with zero)">
-                        <input type="hidden" id="operation" name="operation" value="create_accounts">
+                        <input type="number" id="phone" name="phoneNumber" placeholder="Enter phone number (start with zero)"/>
+                        <button class="button" onclick="createAccounts()">Create Account</button>
                     </div>
                 </div>
             </form>
-            <button class="button" onclick="createAccounts('createAccountForm')">Create Account</button>
         </div>
     </div>
 </div>
@@ -52,13 +43,13 @@
             <div class="row">
                 <div class="col-50">
                     <label for="creditAccount">Account Number</label>
-                    <input type="text" id="creditAccount" name="accountNumber" placeholder="Account  number">
+                    <input type="text" id="creditAccount" name="accountNumber" placeholder="Account  number"/>
                     <label for="amount">Credit Amount</label>
-                    <input type="number" id="amount" name="phoneNumber" placeholder="Amount">
+                    <input type="number" id="amount" name="phoneNumber" placeholder="Amount"/>
+                    <button class="button" onclick="depositMoney()">Deposit funds</button>
                 </div>
             </div>
         </form>
-        <button class="button" onclick="depositMoney('createAccountForm')">Deposit funds</button>
     </div>
 </div>
 <h2>Withdrawals</h2>
@@ -71,10 +62,10 @@
                     <input type="text" id="debitAccount" name="accountNumber" placeholder="Account  number">
                     <label for="debitAmount">Debit Amount</label>
                     <input type="number" id="debitAmount" name="phoneNumber" placeholder="Amount">
+                    <button class="button" onclick="withdrawMoney('createAccountForm')">Withdraw funds</button>
                 </div>
             </div>
         </form>
-        <button class="button" onclick="withdrawMoney('createAccountForm')">Withdraw funds</button>
     </div>
 </div>
 <h2>Transaction Logs</h2>
@@ -85,10 +76,10 @@
                 <div class="col-50">
                     <label for="transactionAccount">Transaction Accounts</label>
                     <input type="text" id="transactionAccount" name="accountNumber" placeholder="Account  number">
+                    <button class="button" onclick="getTransactionLogs()">Transaction logs</button>
                 </div>
             </div>
         </form>
-        <button class="button" onclick="getTransactionLogs()">Get transaction logs</button>
     </div>
 </div>
 <table id="transactionLogs">

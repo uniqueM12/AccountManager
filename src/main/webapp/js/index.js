@@ -1,4 +1,4 @@
-function createAccounts(formId) {
+function createAccounts() {
 
 	// document.getElementById(formId).preventDe
 	const xhttp = new XMLHttpRequest();
@@ -31,7 +31,7 @@ function createAccounts(formId) {
 	}
 }
 
-function depositMoney(formId) {
+function depositMoney() {
 	const xhttp = new XMLHttpRequest();
 	const accountNumber = document.getElementById("creditAccount").value;
 	const amount = document.getElementById("amount").value;
@@ -40,7 +40,14 @@ function depositMoney(formId) {
 
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
+			console.log("responseText", this.responseText);
+			populateTransaction(accountNumber);
+			alert("Credit successful, log updated");
 		}
+		// else {
+		// 	const message = JSON.parse(this.responseText).message;
+		// 	alert("Credit failure, " + message);
+		// }
 	}
 }
 
@@ -53,14 +60,26 @@ function withdrawMoney(formId) {
 
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
+			console.log("responseText", this.responseText);
+			populateTransaction(debitAccount);
+			alert("Debit successful, log updated");
 		}
+		// else {
+		// 	const message = JSON.parse(this.responseText).message;
+		// 	alert("Debit failure, " + message);
+		// }
 	}
 }
 
 function getTransactionLogs(){
 	const xhttp = new XMLHttpRequest();
-	const transactionAccounts = document.getElementById("transactionAccount").value;
-	xhttp.open("GET", "/AccountManager_war_exploded/transactions?transactions=" + transactionAccounts);
+	const transactionAccount = document.getElementById("transactionAccount").value;
+	populateTransaction(transactionAccount);
+}
+
+function populateTransaction(accountNumber){
+	const xhttp = new XMLHttpRequest();
+	xhttp.open("GET", "/AccountManager_war_exploded/transactions?accountnumber=" + accountNumber);
 	xhttp.send();
 
 	xhttp.onreadystatechange = function() {
@@ -70,6 +89,11 @@ function getTransactionLogs(){
 			// Insert new rows to display accounts created.
 
 			const table = document.getElementById("transactionLogs");
+
+			const rows = table.getElementsByTagName("tr");
+			while (rows.length > 1) {
+				rows[1].parentNode.removeChild(rows[1]);
+			}
 
 			transactions.forEach((transaction, i) => {
 				// We already have a table header, so we insert after it.
