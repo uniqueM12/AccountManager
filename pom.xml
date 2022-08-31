@@ -6,7 +6,7 @@
 
 	<groupId>com.account.manager</groupId>
 	<artifactId>AccountManager</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>AccountManager</name>
 	<packaging>war</packaging>
 
@@ -57,5 +57,6 @@
 				<version>3.3.2</version>
 			</plugin>
 		</plugins>
+		<finalName>accountmanager</finalName>
 	</build>
 </project>
