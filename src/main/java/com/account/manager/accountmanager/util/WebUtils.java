@@ -26,14 +26,14 @@ public class WebUtils {
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 		for (Account account : accounts) {
 			JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
-					.add("firstName", account.getAccountName())
+					.add("accountName", account.getAccountName())
 					.add("phone", account.getPhone())
 					.add("accountNumber", account.getAccountNumber())
 					.add("balance", account.getBalance());
 			getObjectArray(arrayBuilder, objectBuilder);
 		}
 
-		return arrayBuilder.build().toString().replace("\\", "");
+		return cleanUpJson(arrayBuilder);
 	}
 
 	public static String convertTransactionsToJson(String accountNumber) {
@@ -48,7 +48,7 @@ public class WebUtils {
 		//the design provides that there is no need for this sorting, but you stated that you want it, so Ok.
 		transactionLogStream = transactionLogStream.sorted(Comparator.comparingLong(TransactionLog::getCreatedAt).reversed());
 
-	List<TransactionLog> selectedTransactionLogs = transactionLogStream.collect(Collectors.toList());
+		List<TransactionLog> selectedTransactionLogs = transactionLogStream.collect(Collectors.toList());
 
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 		for (TransactionLog transactionLog : selectedTransactionLogs) {
@@ -60,10 +60,21 @@ public class WebUtils {
 			getObjectArray(arrayBuilder, objectBuilder);
 		}
 
-		return arrayBuilder.build().toString().replace("\\", "");
+		return cleanUpJson(arrayBuilder);
 	}
 
-	public static String convertTransactionLogToJson(TransactionLog transactionLog){
+	private static String cleanUpJson(JsonArrayBuilder arrayBuilder) {
+		String jsonString = arrayBuilder.build().toString();
+		jsonString = jsonString.replace("[\"", "[");
+		jsonString = jsonString.replace("\"]", "]");
+		jsonString = jsonString.replace("{\\", "{");
+		jsonString = jsonString.replace("}\"", "}");
+		jsonString = jsonString.replace("\"{", "{");
+		jsonString = jsonString.replace("\\", "");
+		return jsonString;
+	}
+
+	public static String convertTransactionLogToJson(TransactionLog transactionLog) {
 
 		JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
 				.add("accountNumber", transactionLog.getAccountNumber())

@@ -34,6 +34,7 @@ public class AccountServlet extends HttpServlet {
 		FinanceUtil.accounts = generateAccounts(name, phone);
 
 		FinanceUtil.accounts.forEach(System.out::println);
+		FinanceUtil.transactionLogs = new ArrayList<>();
 
 		String accountsJson = convertAccountsToJson(FinanceUtil.accounts);
 
