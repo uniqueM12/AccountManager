@@ -8,25 +8,27 @@ function createAccounts() {
 	xhttp.send();
 
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			console.log("responseText", this.responseText);
-			const accounts = JSON.parse(this.responseText);
-			// Insert new rows to display accounts created.
+		if (this.readyState === 4) {
+			if (this.status === 200) {
+				console.log("responseText", this.responseText);
+				const accounts = JSON.parse(this.responseText);
+				// Insert new rows to display accounts created.
 
-			const table = document.getElementById("generated_accounts");
-			accounts.forEach((account, i) => {
-				// We already have a table header, so we insert after it.
-				const row = table.insertRow(-1);
-				const accountNameCell = row.insertCell(0);
-				const accountNumberCell = row.insertCell(1);
-				const balanceCell = row.insertCell(2);
+				const table = document.getElementById("generated_accounts");
+				accounts.forEach((account) => {
+					// We already have a table header, so we insert after it.
+					const row = table.insertRow(-1);
+					const accountNameCell = row.insertCell(0);
+					const accountNumberCell = row.insertCell(1);
+					const balanceCell = row.insertCell(2);
 
-				// Account details.
-				accountNameCell.innerHTML = account.accountName;
-				accountNumberCell.innerHTML = account.accountNumber;
-				balanceCell.innerHTML = new String(account.balance);
-			});
+					// Account details.
+					accountNameCell.innerHTML = account.accountName;
+					accountNumberCell.innerHTML = account.accountNumber;
+					balanceCell.innerHTML = String(account.balance);
+				});
 
+			}
 		}
 	}
 }
@@ -39,19 +41,20 @@ function depositMoney() {
 	xhttp.send();
 
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			console.log("responseText", this.responseText);
-			populateTransaction(accountNumber);
-			alert("Credit successful, log updated");
+		if (this.readyState === 4) {
+			if (this.status === 200) {
+				console.log("responseText", this.responseText);
+				populateTransaction(accountNumber);
+				alert("Credit successful, log updated");
+			}else {
+				const message = JSON.parse(this.responseText).message;
+				alert("Credit failure, " + message);
+			}
 		}
-		// else {
-		// 	const message = JSON.parse(this.responseText).message;
-		// 	alert("Credit failure, " + message);
-		// }
 	}
 }
 
-function withdrawMoney(formId) {
+function withdrawMoney() {
 	const xhttp = new XMLHttpRequest();
 	const debitAccount = document.getElementById("debitAccount").value;
 	const debitAmount = document.getElementById("debitAmount").value;
@@ -59,20 +62,21 @@ function withdrawMoney(formId) {
 	xhttp.send();
 
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			console.log("responseText", this.responseText);
-			populateTransaction(debitAccount);
-			alert("Debit successful, log updated");
+		if (this.readyState === 4) {
+			if (this.status === 200) {
+				console.log("responseText", this.responseText);
+				populateTransaction(debitAccount);
+				alert("Debit successful, log updated");
+			}
+			else {
+				const message = JSON.parse(this.responseText).message;
+				alert("Debit failure, " + message);
+			}
 		}
-		// else {
-		// 	const message = JSON.parse(this.responseText).message;
-		// 	alert("Debit failure, " + message);
-		// }
 	}
 }
 
 function getTransactionLogs(){
-	const xhttp = new XMLHttpRequest();
 	const transactionAccount = document.getElementById("transactionAccount").value;
 	populateTransaction(transactionAccount);
 }
@@ -83,7 +87,7 @@ function populateTransaction(accountNumber){
 	xhttp.send();
 
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+		if (this.readyState === 4 && this.status === 200) {
 			console.log("responseText", this.responseText);
 			const transactions = JSON.parse(this.responseText);
 			// Insert new rows to display accounts created.
@@ -95,7 +99,7 @@ function populateTransaction(accountNumber){
 				rows[1].parentNode.removeChild(rows[1]);
 			}
 
-			transactions.forEach((transaction, i) => {
+			transactions.forEach((transaction) => {
 				// We already have a table header, so we insert after it.
 				const row = table.insertRow(-1);
 				const accountNumberCell = row.insertCell(0);
@@ -106,7 +110,7 @@ function populateTransaction(accountNumber){
 				// Account details.
 				accountNumberCell.innerHTML = transaction.accountNumber;
 				tranAmountCell.innerHTML = transaction.amount;
-				balanceCell.innerHTML = new String(transaction.balance);
+				balanceCell.innerHTML = String(transaction.balance);
 				tranTypeCell.innerHTML = transaction.transactionType;
 			});
 

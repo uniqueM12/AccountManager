@@ -4,6 +4,7 @@ import com.account.manager.accountmanager.dto.TransactionLog;
 import com.account.manager.accountmanager.enums.TransactionTypes;
 import com.account.manager.accountmanager.util.FinanceUtil;
 
+import javax.json.Json;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +27,28 @@ public class DepositServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
 
 		String accountNumber = request.getParameter("accountnumber");
 		String amount = request.getParameter("amount");
+
+		if (accountNumber == null || accountNumber.length() < 1) {
+			String errorResponse = Json.createObjectBuilder()
+					.add("message", "Invalid Account number").build().toString();
+			response.setStatus(500);
+			out.print(errorResponse);
+			out.flush();
+			return;
+		}
+
+		if (amount == null || amount.length() < 1) {
+			String errorResponse = Json.createObjectBuilder()
+					.add("message", "Invalid Amount").build().toString();
+			response.setStatus(500);
+			out.print(errorResponse);
+			out.flush();
+			return;
+		}
 
 		AtomicReference<TransactionLog> transactionLog = new AtomicReference<>();
 		FinanceUtil.accounts = FinanceUtil.accounts.stream()
@@ -45,7 +65,6 @@ public class DepositServlet extends HttpServlet {
 
 		String accountsJson = convertTransactionLogToJson(transactionLog.get());
 
-		PrintWriter out = response.getWriter();
 
 		out.print(accountsJson);
 		out.flush();

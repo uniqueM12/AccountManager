@@ -3,6 +3,8 @@ package com.account.manager.accountmanager.servlets;
 import com.account.manager.accountmanager.dto.Account;
 import com.account.manager.accountmanager.util.FinanceUtil;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +28,29 @@ public class AccountServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+
 
 		String name = request.getParameter("name");
 		String phone = request.getParameter("phone");
-		System.out.println(name + phone);
+
+		if (name == null || name.length() < 1) {
+			String errorResponse = Json.createObjectBuilder()
+					.add("message", "Invalid Account name").build().toString();
+			response.setStatus(500);
+			out.print(errorResponse);
+			out.flush();
+			return;
+		}
+
+		if (phone == null || phone.length() < 1) {
+			String errorRespone = Json.createObjectBuilder()
+					.add("message", "Invalid phone number").build().toString();
+			response.setStatus(500);
+			out.print(errorRespone);
+			out.flush();
+			return;
+		}
 
 		FinanceUtil.accounts = generateAccounts(name, phone);
 
@@ -38,7 +59,6 @@ public class AccountServlet extends HttpServlet {
 
 		String accountsJson = convertAccountsToJson(FinanceUtil.accounts);
 
-		PrintWriter out = response.getWriter();
 
 		out.print(accountsJson);
 		out.flush();
