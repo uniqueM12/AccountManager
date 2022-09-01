@@ -25,9 +25,11 @@ function createAccounts() {
 					// Account details.
 					accountNameCell.innerHTML = account.accountName;
 					accountNumberCell.innerHTML = account.accountNumber;
-					balanceCell.innerHTML = String(account.balance);
+					balanceCell.innerHTML = account.balance.toFixed(2);
 				});
-
+			}else{
+				const message = JSON.parse(this.responseText).message;
+				alert("Accounts creation: " + message);
 			}
 		}
 	}
@@ -110,7 +112,7 @@ function populateTransaction(accountNumber){
 				// Account details.
 				accountNumberCell.innerHTML = transaction.accountNumber;
 				tranAmountCell.innerHTML = transaction.amount;
-				balanceCell.innerHTML = String(transaction.balance);
+				balanceCell.innerHTML = transaction.balance.toFixed(2);
 				tranTypeCell.innerHTML = transaction.transactionType;
 			});
 
